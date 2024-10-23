@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,3 +22,16 @@ spec:
             limits:
               cpu: "500m"
               memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: harness-test-service
+spec:
+  selector:
+    app: harness-test
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: NodePort
