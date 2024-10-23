@@ -46,6 +46,6 @@ pipeline:
                   identifier: docker
                   spec:
                     connectorRef: maxdocker
-                    repo: max-test-harness
+                    repo: enterpriseautomation/maxharnesstest
                     tags:
                       - test1
