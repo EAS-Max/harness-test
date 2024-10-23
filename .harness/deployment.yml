@@ -1,0 +1,20 @@
+service:
+  name: harness-test-k8s-service
+  identifier: harnesstestk8sservice
+  serviceDefinition:
+    type: Kubernetes
+    spec:
+      artifacts:
+        primary:
+          primaryArtifactRef: <+input>
+          sources:
+            - spec:
+                connectorRef: maxdocker
+                imagePath: enterpriseautomation/maxharnesstest
+                tag: <+input>
+                digest: ""
+              identifier: maxtest
+              type: DockerRegistry
+  gitOpsEnabled: false
+  orgIdentifier: default
+  projectIdentifier: testprojectm
