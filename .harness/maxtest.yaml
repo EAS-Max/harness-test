@@ -1,0 +1,8 @@
+environment:
+  name: max-test
+  identifier: maxtest
+  description: ""
+  tags: {}
+  type: PreProduction
+  orgIdentifier: default
+  projectIdentifier: testprojectm
