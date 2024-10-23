@@ -1,0 +1,51 @@
+pipeline:
+  name: test
+  identifier: test
+  projectIdentifier: testprojectm
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: MaxConnector
+        repoName: harness-test
+        build: <+input>
+  stages:
+    - stage:
+        name: build
+        identifier: build
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Docker
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Install Dep
+                  identifier: Install_Dep
+                  spec:
+                    shell: Sh
+                    command: npm install
+              - step:
+                  type: Run
+                  name: Build
+                  identifier: Build
+                  spec:
+                    shell: Sh
+                    command: npm run build
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: docker
+                  identifier: docker
+                  spec:
+                    connectorRef: maxdocker
+                    repo: max-test-harness
+                    tags:
+                      - test1
