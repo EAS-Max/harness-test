@@ -15,6 +15,22 @@ service:
                 digest: ""
               identifier: maxtest
               type: DockerRegistry
+      manifests:
+        - manifest:
+            identifier: MaxManifestTest
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: MaxConnector
+                  gitFetchType: Branch
+                  paths:
+                    - .harness/deployment.yml
+                  repoName: harness-test
+                  branch: main
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
   gitOpsEnabled: false
   orgIdentifier: default
   projectIdentifier: testprojectm
