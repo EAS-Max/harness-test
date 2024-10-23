@@ -1,0 +1,9 @@
+service:
+  name: max-service
+  identifier: maxservice
+  serviceDefinition:
+    type: Kubernetes
+    spec: {}
+  gitOpsEnabled: false
+  orgIdentifier: default
+  projectIdentifier: testprojectm
