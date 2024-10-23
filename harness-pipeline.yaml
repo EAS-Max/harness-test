@@ -1,0 +1,30 @@
+pipeline:
+  name: React App Deployment Pipeline
+  stages:
+    - stage:
+        name: Build and Deploy
+        type: CI
+        spec:
+          execution:
+            steps:
+              - step:
+                  name: Build Docker Image
+                  type: DockerBuild
+                  spec:
+                    connectorRef: <your-docker-connector>
+                    image: <your-docker-repo>/harness-test:latest
+                    dockerfilePath: Dockerfile
+                    contextPath: .
+              - step:
+                  name: Deploy to Kubernetes
+                  type: KubernetesDeploy
+                  spec:
+                    connectorRef: <your-k8s-connector>
+                    namespace: <your-namespace>
+                    releaseName: harness-test
+                    chart:
+                      chartName: <your-chart-name>
+                      chartVersion: <your-chart-version>
+                    values:
+                      image:
+                        name: <your-docker-repo>/harness-test:latest
