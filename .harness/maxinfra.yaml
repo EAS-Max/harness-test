@@ -1,0 +1,13 @@
+infrastructureDefinition:
+  name: max-infra
+  identifier: maxinfra
+  orgIdentifier: default
+  projectIdentifier: testprojectm
+  environmentRef: maxtest
+  deploymentType: Kubernetes
+  type: KubernetesDirect
+  spec:
+    connectorRef: maxk8sconnector
+    namespace: max-test
+    releaseName: release-<+INFRA_KEY_SHORT_ID>
+  allowSimultaneousDeployments: false
