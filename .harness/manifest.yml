@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: harness-test-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: harness-test
+  template:
+    metadata:
+      labels:
+        app: harness-test
+    spec:
+      containers:
+        - name: harness-test-container
+          image: enterpriseautomation/maxharnesstest:test1
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
