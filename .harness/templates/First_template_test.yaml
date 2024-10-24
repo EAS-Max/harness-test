@@ -1,0 +1,102 @@
+template:
+  name: First template test
+  type: Pipeline
+  projectIdentifier: testprojectm
+  orgIdentifier: default
+  spec:
+    properties:
+      ci:
+        codebase:
+          connectorRef: MaxConnector
+          repoName: harness-test
+          build: <+input>
+    stages:
+      - stage:
+          name: build
+          identifier: build
+          description: ""
+          type: CI
+          spec:
+            cloneCodebase: true
+            platform:
+              os: Linux
+              arch: Amd64
+            runtime:
+              type: Cloud
+              spec: {}
+            execution:
+              steps:
+                - step:
+                    type: Run
+                    name: Install Dep
+                    identifier: Install_Dep
+                    spec:
+                      shell: Sh
+                      command: npm install
+                - step:
+                    type: Run
+                    name: Build
+                    identifier: Build
+                    spec:
+                      shell: Sh
+                      command: npm run build
+                - step:
+                    type: BuildAndPushDockerRegistry
+                    name: docker
+                    identifier: docker
+                    spec:
+                      connectorRef: maxdocker
+                      repo: enterpriseautomation/maxharnesstest
+                      tags:
+                        - test1
+      - stage:
+          name: deploy
+          identifier: deploy
+          description: ""
+          type: Deployment
+          spec:
+            deploymentType: Kubernetes
+            service:
+              serviceRef: harnesstestk8sservice
+              serviceInputs:
+                serviceDefinition:
+                  type: Kubernetes
+                  spec:
+                    artifacts:
+                      primary:
+                        primaryArtifactRef: <+input>
+                        sources: <+input>
+              gitBranch: main
+            environment:
+              environmentRef: maxtest
+              gitBranch: main
+              deployToAll: false
+              infrastructureDefinitions:
+                - identifier: maxinfra
+            execution:
+              steps:
+                - step:
+                    name: Rollout Deployment
+                    identifier: rolloutDeployment
+                    type: K8sRollingDeploy
+                    timeout: 10m
+                    spec:
+                      skipDryRun: false
+                      pruningEnabled: false
+              rollbackSteps:
+                - step:
+                    name: Rollback Rollout Deployment
+                    identifier: rollbackRolloutDeployment
+                    type: K8sRollingRollback
+                    timeout: 10m
+                    spec:
+                      pruningEnabled: false
+          tags: {}
+          failureStrategies:
+            - onFailure:
+                errors:
+                  - AllErrors
+                action:
+                  type: StageRollback
+  identifier: First_template_test
+  versionLabel: "1"
